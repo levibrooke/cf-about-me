@@ -31,6 +31,8 @@ let askQuestion = (arr) => {
   }
 };
 
-document.addEventListener('click', () => {
+var play = document.getElementById('play-button');
+
+play.addEventListener('click', () => {
   askQuestion(questions);
 });
