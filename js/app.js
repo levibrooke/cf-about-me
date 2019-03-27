@@ -31,8 +31,31 @@ let askQuestion = (arr) => {
   }
 };
 
+let questionList = document.querySelectorAll('.card ul li > span');
+
+let checkAnswers = (arr) => {
+  if (arr.length < 1) {
+    return;
+  } else {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === 'yes') {
+        questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+      } else {
+        questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+      }
+    }
+  }
+};
+
 var play = document.getElementById('play-button');
 
 play.addEventListener('click', () => {
   askQuestion(questions);
+});
+
+var check = document.getElementById('show-responses');
+
+check.addEventListener('click', (e) => {
+  e.preventDefault();
+  checkAnswers(responses);
 });
