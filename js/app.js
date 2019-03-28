@@ -9,7 +9,7 @@ Questions for guessing game
 - Is my favorite team the Sounders?
 */
 
-let questions = ["Is my name Levi?", "Did I live in Hawaii?", "Am I the Javascript God?", "Do I like to play soccer?", "Is my favorite team the Sounders?", "What is my age?", "Can you guess a state that I have lived in beside Washington?"];
+let questions = ['Is my name Levi?', 'Did I live in Hawaii?', 'Am I the Javascript God?', 'Do I like to play soccer?', 'Is my favorite team the Sounders?', 'What is my age?', 'Can you guess a state that I have lived in beside Washington?'];
 
 let responses = [];
 
@@ -35,6 +35,17 @@ let askQuestion = (arr, startIndex) => {
   console.log(responses);
 };
 
+let reaskQuestion = (arr, index, type) => {
+  let answer = prompt(arr[index]);
+  answer.toLowerCase();
+
+  if (type === 'age') {
+    handleAgeQuestion(arr, index, answer);
+  } else if (type === 'state') {
+    handleStateQuestion(arr, index, answer);
+  }
+};
+
 let validateYesNoAnswers = (question, answer) => {
   if (answer === 'no') {
     responses.push(answer);
@@ -49,7 +60,7 @@ let validateYesNoAnswers = (question, answer) => {
 
 let ageQuestionAttempts = 1;
 
-let handleAgeQuestion = (question, index, answer) => {
+let handleAgeQuestion = (questions, index, answer) => {
   let correctAnswer = 32;
   let maxAttempts = 4;
   let correctAge = false;
@@ -60,36 +71,37 @@ let handleAgeQuestion = (question, index, answer) => {
 
   while (ageQuestionAttempts < maxAttempts && !correctAge) {
     ageQuestionAttempts++;
+    console.log(ageQuestionAttempts);
 
     if (answer === correctAnswer) {
       responses.push(answer);
+      console.log(responses);
       correctAge = true;
       break;
     } else if (answer > correctAnswer) {
       alert('You\'re guess is too high.');
-      askQuestion(question, index);
+      // askQuestion(question, index);
+      reaskQuestion(questions, index, 'age');
     } else if (answer < correctAnswer) {
       alert('You\'re guess is too low.');
-      askQuestion(question, index);
+      // askQuestion(question, index);
+      reaskQuestion(questions, index, 'age');
     }
   }
 };
 
 let stateQuestionAttempts = 1;
+let correctAnswer = null;
 
 let handleStateQuestion = (question, index, answer) => {
   let validStates = ['missouri', 'florida', 'hawaii'];
   let maxAttempts = 6;
-  let correctAnswer = false;
 
-  if (stateQuestionAttempts === 6) {
-    responses.push('Ran out of attempts');
-    alert('I\'ve lived in Missouri, Florida, & Hawaii.');
-  }
-
-  while (stateQuestionAttempts < maxAttempts && !correctAnswer) {
+  while (stateQuestionAttempts < maxAttempts && correctAnswer !== true) {
     stateQuestionAttempts++;
+    console.log(stateQuestionAttempts);
 
+    // check if correct answer given
     for (let i = 0; i < validStates.length; i++) {
       if (answer === validStates[i]) {
         correctAnswer = true;
@@ -98,9 +110,15 @@ let handleStateQuestion = (question, index, answer) => {
         break;
       }
     }
-    if (!correctAnswer) {
+    console.log(correctAnswer);
+    // if not correct & under the attempt limit
+    if (correctAnswer !== true && stateQuestionAttempts < 6) {
       alert('That\'s incorrect! Please try again.');
-      askQuestion(question, index);
+      // askQuestion(question, index);
+      reaskQuestion(question, index, 'state');
+    } else if (stateQuestionAttempts === 6) {
+      responses.push('Ran out of attempts');
+      alert('I\'ve lived in Missouri, Florida, & Hawaii.');
     }
   }
 };
