@@ -19,6 +19,7 @@ let askQuestion = (arr, startIndex) => {
     answer.toLowerCase();
 
     if (i <= 4) {
+      // handle yes/no questions
       validateYesNoAnswers(arr[i], answer);
     } else if (i === 5) {
       // handle age question
@@ -31,6 +32,7 @@ let askQuestion = (arr, startIndex) => {
 
     console.log(arr[i], answer);
   }
+  console.log(responses);
 };
 
 let validateYesNoAnswers = (question, answer) => {
@@ -39,8 +41,7 @@ let validateYesNoAnswers = (question, answer) => {
   } else if (answer === 'yes') {
     responses.push(answer);
   } else if (answer !== 'no' || answer !== 'yes') {
-    alert('You didn\'t answer yes or no');
-    console.log(question);
+    alert('You didn\'t answer yes or no.');
     let nullQuestion = [question];
     askQuestion(nullQuestion);
   }
@@ -51,21 +52,24 @@ let ageQuestionAttempts = 1;
 let handleAgeQuestion = (question, index, answer) => {
   let correctAnswer = 32;
   let maxAttempts = 4;
+  let correctAge = false;
 
   if (ageQuestionAttempts === 4) {
     responses.push('Ran out of attempts');
   }
 
-  while (ageQuestionAttempts < maxAttempts) {
+  while (ageQuestionAttempts < maxAttempts && !correctAge) {
     ageQuestionAttempts++;
 
     if (answer === correctAnswer) {
+      responses.push(answer);
+      correctAge = true;
       break;
     } else if (answer > correctAnswer) {
-      alert('You\'re guess is too high');
+      alert('You\'re guess is too high.');
       askQuestion(question, index);
     } else if (answer < correctAnswer) {
-      alert('You\'re guess is too low');
+      alert('You\'re guess is too low.');
       askQuestion(question, index);
     }
   }
@@ -76,14 +80,27 @@ let stateQuestionAttempts = 1;
 let handleStateQuestion = (question, index, answer) => {
   let validStates = ['missouri', 'florida', 'hawaii'];
   let maxAttempts = 6;
+  let correctAnswer = false;
 
-  while (stateQuestionAttempts < maxAttempts) {
+  if (stateQuestionAttempts === 6) {
+    responses.push('Ran out of attempts');
+    alert('I\'ve lived in Missouri, Florida, & Hawaii.');
+  }
+
+  while (stateQuestionAttempts < maxAttempts && !correctAnswer) {
     stateQuestionAttempts++;
 
     for (let i = 0; i < validStates.length; i++) {
       if (answer === validStates[i]) {
-        alert('That\'s correct! I\'ve lived in Missouri, Florida, & Hawaii');
+        correctAnswer = true;
+        alert('That\'s correct! I\'ve lived in Missouri, Florida, & Hawaii.');
+        responses.push(answer);
+        break;
       }
+    }
+    if (!correctAnswer) {
+      alert('That\'s incorrect! Please try again.');
+      askQuestion(question, index);
     }
   }
 };
