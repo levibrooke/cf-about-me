@@ -1,5 +1,11 @@
 # Lab 03: Extend your 'About Me' and guessing game
 
+ Driver: Luke Chandler
+ Navigator: Levi Porter 
+
+Levi was already using functions so what we did together was just tweak some of the logic and fix some bugs.
+---
+
 ## Notes for assignment
 - No functions in javascript.
 - Use `prompt` and `alert` for user input and responses.
