@@ -47,11 +47,11 @@ let reaskQuestion = (arr, index, type) => {
 };
 
 let validateYesNoAnswers = (question, answer) => {
-  if (answer === 'no') {
+  if (answer === 'no' || answer === 'n') {
     responses.push(answer);
-  } else if (answer === 'yes') {
+  } else if (answer === 'yes' || answer === 'y') {
     responses.push(answer);
-  } else if (answer !== 'no' || answer !== 'yes') {
+  } else {
     alert('You didn\'t answer yes or no.');
     let nullQuestion = [question];
     askQuestion(nullQuestion);
