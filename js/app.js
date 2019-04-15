@@ -105,7 +105,7 @@ let handleStateQuestion = (question, index, answer) => {
       if (answer.toLowerCase() === validStates[i]) {
         correctAnswer = true;
         alert('That\'s correct! I\'ve lived in Missouri, Florida, & Hawaii.');
-        responses.push(answer.toLowerCase());
+        responses.push('correct');
         break;
       }
     }
@@ -121,29 +121,51 @@ let handleStateQuestion = (question, index, answer) => {
   }
 };
 
-let questionList = document.querySelectorAll('.card ul li > span');
+let questionList = document.getElementsByClassName('question-response');
 
 let checkAnswers = (arr) => {
   if (arr.length < 1) {
     return;
   } else {
+    console.log('arr', arr);
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === 'yes') {
-        questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
-      } else {
-        questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+      if (i < 5) {
+        if (arr[i] === 'yes' || arr[i] === 'y') {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
+      }
+      else if (i === 5) {
+        if (arr[i] === 32) {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
+      }
+      else if (i === 6) {
+        if (arr[i] === 'correct') {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
       }
     }
   }
 };
 
+let postQuestions = () => {
+  var promptEl = document.getElementById('prompt');
+  promptEl.style.display = 'none';
+
+  var mainEl = document.querySelector('main');
+  mainEl.style.display = 'flex';
+};
+
 document.body.addEventListener('keypress', (e) => {
   e.key === 'Enter' && askQuestion(questions, 0);
+
+  postQuestions();
+  checkAnswers(responses);
 });
 
-// var check = document.getElementById('show-responses');
-
-// check.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   checkAnswers(responses);
-// });
