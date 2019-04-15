@@ -37,21 +37,21 @@ let askQuestion = (arr, startIndex) => {
 
 let reaskQuestion = (arr, index, type) => {
   let answer = prompt(arr[index]);
-  answer.toLowerCase();
 
   if (type === 'age') {
     handleAgeQuestion(arr, index, answer);
   } else if (type === 'state') {
+    answer.toLowerCase();
     handleStateQuestion(arr, index, answer);
   }
 };
 
 let validateYesNoAnswers = (question, answer) => {
-  if (answer === 'no') {
+  if (answer === 'no' || answer === 'n') {
     responses.push(answer);
-  } else if (answer === 'yes') {
+  } else if (answer === 'yes' || answer === 'y') {
     responses.push(answer);
-  } else if (answer !== 'no' || answer !== 'yes') {
+  } else {
     alert('You didn\'t answer yes or no.');
     let nullQuestion = [question];
     askQuestion(nullQuestion);
@@ -64,6 +64,7 @@ let handleAgeQuestion = (questions, index, answer) => {
   let correctAnswer = 32;
   let maxAttempts = 4;
   let correctAge = false;
+  let inputAnswer = parseInt(answer);
 
   if (ageQuestionAttempts === 4) {
     responses.push('Ran out of attempts');
@@ -73,18 +74,16 @@ let handleAgeQuestion = (questions, index, answer) => {
     ageQuestionAttempts++;
     console.log(ageQuestionAttempts);
 
-    if (answer === correctAnswer) {
-      responses.push(answer);
+    if (inputAnswer === correctAnswer) {
+      responses.push(inputAnswer);
       console.log(responses);
       correctAge = true;
       break;
-    } else if (answer > correctAnswer) {
+    } else if (inputAnswer > correctAnswer) {
       alert('You\'re guess is too high.');
-      // askQuestion(question, index);
       reaskQuestion(questions, index, 'age');
-    } else if (answer < correctAnswer) {
+    } else if (inputAnswer < correctAnswer) {
       alert('You\'re guess is too low.');
-      // askQuestion(question, index);
       reaskQuestion(questions, index, 'age');
     }
   }
@@ -103,10 +102,10 @@ let handleStateQuestion = (question, index, answer) => {
 
     // check if correct answer given
     for (let i = 0; i < validStates.length; i++) {
-      if (answer === validStates[i]) {
+      if (answer.toLowerCase() === validStates[i]) {
         correctAnswer = true;
         alert('That\'s correct! I\'ve lived in Missouri, Florida, & Hawaii.');
-        responses.push(answer);
+        responses.push('correct');
         break;
       }
     }
@@ -114,7 +113,6 @@ let handleStateQuestion = (question, index, answer) => {
     // if not correct & under the attempt limit
     if (correctAnswer !== true && stateQuestionAttempts < 6) {
       alert('That\'s incorrect! Please try again.');
-      // askQuestion(question, index);
       reaskQuestion(question, index, 'state');
     } else if (stateQuestionAttempts === 6) {
       responses.push('Ran out of attempts');
@@ -123,29 +121,51 @@ let handleStateQuestion = (question, index, answer) => {
   }
 };
 
-let questionList = document.querySelectorAll('.card ul li > span');
+let questionList = document.getElementsByClassName('question-response');
 
 let checkAnswers = (arr) => {
   if (arr.length < 1) {
     return;
   } else {
+    console.log('arr', arr);
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === 'yes') {
-        questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
-      } else {
-        questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+      if (i < 5) {
+        if (arr[i] === 'yes' || arr[i] === 'y') {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
+      }
+      else if (i === 5) {
+        if (arr[i] === 32) {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
+      }
+      else if (i === 6) {
+        if (arr[i] === 'correct') {
+          questionList[i].innerHTML = '<i class="fas fa-check-circle"></i>';
+        } else {
+          questionList[i].innerHTML = '<i class="fas fa-times-circle"></i>';
+        }
       }
     }
   }
 };
 
+let postQuestions = () => {
+  var promptEl = document.getElementById('prompt');
+  promptEl.style.display = 'none';
+
+  var mainEl = document.querySelector('main');
+  mainEl.style.display = 'flex';
+};
+
 document.body.addEventListener('keypress', (e) => {
   e.key === 'Enter' && askQuestion(questions, 0);
+
+  postQuestions();
+  checkAnswers(responses);
 });
 
-// var check = document.getElementById('show-responses');
-
-// check.addEventListener('click', (e) => {
-//   e.preventDefault();
-//   checkAnswers(responses);
-// });
